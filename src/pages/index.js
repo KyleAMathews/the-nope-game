@@ -1,5 +1,7 @@
+/** @jsx jsx */
 import React from "react"
 import { Link } from "gatsby"
+import { Styled, jsx } from "theme-ui"
 
 import Layout from "../components/layout"
 import Image from "../components/image"
@@ -8,13 +10,15 @@ import SEO from "../components/seo"
 const IndexPage = () => (
   <Layout>
     <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
+    <Styled.h1>Hi people</Styled.h1>
+    <Styled.p>Welcome to your new Gatsby site.</Styled.p>
+    <Styled.p>Now go build something great.</Styled.p>
+    <div sx={{ maxWidth: 300, marginBottom: [3] }}>
       <Image />
     </div>
-    <Link to="/page-2/">Go to page 2</Link>
+    <Styled.p>
+      <Link to="/page-2/">Go to page 2</Link>
+    </Styled.p>
   </Layout>
 )
 
