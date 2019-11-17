@@ -9,6 +9,7 @@
     "@mdx-js/react": "^1.5.1",
     "@theme-ui/components": "^0.2.49",
     "@theme-ui/presets": "^0.2.44",
+    "@xstate/react": "^0.8.1",
     "gatsby": "^2.17.11",
     "gatsby-image": "^2.2.31",
     "gatsby-plugin-manifest": "^2.2.27",
@@ -24,9 +25,13 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-helmet": "^5.2.1",
-    "theme-ui": "^0.2.49"
+    "react-use": "^13.8.0",
+    "theme-ui": "^0.2.49",
+    "xstate": "^4.6.7"
   },
   "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-plugin-react": "^7.16.0",
     "prettier": "^1.19.1"
   },
   "keywords": [

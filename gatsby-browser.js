@@ -1,7 +1,19 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/browser-apis/
- */
+import React from "react"
+import { useMachine } from "@xstate/react"
 
-// You can delete this file if you're not using it
+import ServiceContext from "./src/service-context"
+import gameMachine from "./src/machines/game-machine"
+
+const XStateProvider = ({ children }) => {
+  const [current, send] = useMachine(gameMachine, { devTools: true })
+  console.log({ current })
+  return (
+    <ServiceContext.Provider value={{ current, send }}>
+      {children}
+    </ServiceContext.Provider>
+  )
+}
+
+export const wrapRootElement = ({ element }) => {
+  return <XStateProvider>{element}</XStateProvider>
+}
