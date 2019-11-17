@@ -25,9 +25,7 @@ const machine = Machine(
     id: "nopeGameMachine",
     initial: "welcome",
     context: {
-      answers: {
-        doYouKnow: ``,
-      },
+      answers: {},
     },
     states: {
       welcome: {
@@ -38,11 +36,14 @@ const machine = Machine(
           },
         },
         on: {
+          SET_SCENARIO: {
+            actions: `setScenario`,
+          },
           NEXT: "doYouKnow",
         },
       },
       doYouKnow: {
-        entry: `setRoute`,
+        // entry: `setRoute`,
         meta: {
           path: `/new-game/question/1`,
           question: {
@@ -76,6 +77,9 @@ const machine = Machine(
           },
         },
         on: {
+          SET_SCENARIO: {
+            actions: `setScenario`,
+          },
           PREV: `doYouKnow`,
           NEXT: "canYouDo",
         },
@@ -247,7 +251,7 @@ const machine = Machine(
       },
       isDone: {
         on: {
-          CONTINUE: "summaryScreen",
+          PREV: `timingBad`,
         },
       },
       summaryScreen: {},
@@ -255,13 +259,17 @@ const machine = Machine(
   },
   {
     actions: {
-      setRoute: (context, event, meta) => {
-        console.log(`setRoute`, { context, event, meta })
-        console.log(Object.values(meta.state.meta)[0].path)
-        gatsby.navigate(Object.values(meta.state.meta)[0].path)
-      },
+      // setRoute: (context, event, meta) => {
+      // console.log(`setRoute`, { context, event, meta })
+      // console.log(Object.values(meta.state.meta)[0].path)
+      // gatsby.navigate(Object.values(meta.state.meta)[0].path)
+      // },
       setYes: assign((context, event) => {
         context.answers[event.value] = event.type
+        return context
+      }),
+      setScenario: assign((context, event) => {
+        context.scenario = event.value
         return context
       }),
       setNo: assign((context, event) => {

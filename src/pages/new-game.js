@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import React, { useState, useEffect, useContext } from "react"
-import { Router, Link } from "@reach/router"
 import { Styled, jsx } from "theme-ui"
 import {
   Box,
@@ -14,7 +13,7 @@ import {
   Checkbox,
   Slider,
 } from "@theme-ui/components"
-import useKeyPressEvent from "react-use/lib/useKeyPressEvent"
+import hotkeys from "hotkeys-js"
 
 import ServiceContext from "../service-context"
 
@@ -61,17 +60,19 @@ const YesNoQuestion = ({ children, context, value, send }) => {
   )
 }
 
-const Question = () => {
-  const service = useContext(ServiceContext)
+const Question = ({ service }) => {
   const { current, send } = service
   console.log(`current`, current.value, current)
   const meta = Object.values(current.meta)[0]
   console.log({ meta })
 
+  // Ignore welcome screen
+  if (current.value === `isDone` || meta.welcome) return null
+
   // Create the current screen.
   let Screen
   if (meta.question.type === `yes/no`) {
-    Screen = () => (
+    return (
       <Box>
         <YesNoQuestion
           send={send}
@@ -83,28 +84,52 @@ const Question = () => {
       </Box>
     )
   } else if (meta.question.type === `textarea`) {
-    Screen = () => (
+    return (
       <Box>
         <Label>{meta.question.question}</Label>
-        <Textarea name="request" rows="4" mb={3} />
+        <Textarea
+          value={current.context.scenario}
+          onChange={e => send({ type: `SET_SCENARIO`, value: e.target.value })}
+          name="request"
+          rows="4"
+          mb={3}
+        />
+        <Button onClick={() => send(`NEXT`)}>Continue</Button>
       </Box>
     )
   }
-  return <Screen />
 }
 const Welcome = () => {
   const service = useContext(ServiceContext)
   const send = service.send
-  return (
-    <Box>
-      <Styled.h1>New Game</Styled.h1>
-      <Styled.p>
-        Welcome to the Nope Game! This game can help you decide whether to say
-        yes or no to someone’s request, and how strongly to say yes or no
-      </Styled.p>
-      <Button onClick={() => send(`NEXT`)}>Start the Game</Button>
-    </Box>
-  )
+  if (service.current.value === `welcome`) {
+    return (
+      <Box>
+        <Styled.h1>New Game</Styled.h1>
+        <Styled.p>
+          Welcome to the Nope Game! This game can help you decide whether to say
+          yes or no to someone’s request, and how strongly to say yes or no
+        </Styled.p>
+        <Button onClick={() => send(`NEXT`)}>Start the Game</Button>
+      </Box>
+    )
+  } else {
+    return null
+  }
+}
+
+const DoneScreen = () => {
+  const service = useContext(ServiceContext)
+  if (service.current.value === `isDone`) {
+    return (
+      <Box>
+        <Styled.h1>Game Finished</Styled.h1>
+        <pre>{JSON.stringify(service.current.context.answers, null, 4)}</pre>
+      </Box>
+    )
+  } else {
+    return null
+  }
 }
 
 const IndexPage = () => {
@@ -118,107 +143,37 @@ const IndexPage = () => {
     send(`NEXT`)
   }
 
-  useKeyPressEvent("Enter", sendNext)
-  useKeyPressEvent("ArrowDown", sendNext)
-  useKeyPressEvent("ArrowRight", sendNext)
-  useKeyPressEvent("ArrowUp", sendPrev)
-  useKeyPressEvent("ArrowLeft", sendPrev)
-
   useEffect(() => {
-    console.log(`mounted`)
-    // Specify how to clean up after this effect:
+    hotkeys("enter", sendNext)
+    hotkeys("down", sendNext)
+    hotkeys("right", sendNext)
+    hotkeys("up", sendPrev)
+    hotkeys("left", sendPrev)
     return function cleanup() {
-      console.log(`unmounted`)
+      hotkeys.unbind("enter")
+      hotkeys.unbind("left")
+      hotkeys.unbind("up")
+      hotkeys.unbind("right")
+      hotkeys.unbind("down")
     }
   })
 
-  console.log(`current stuff:`, current.value, current.event, current)
-  const meta = Object.values(current.meta)[0]
-  console.log({ meta })
-
-  // Create the current screen.
-  let Screen
-  if (meta.message) {
-    Screen = () => <Styled.p>{meta.message}</Styled.p>
-  } else if (meta.question) {
-    if (meta.question.type === `yes/no`) {
-      Screen = () => (
-        <Box>
-          <YesNoQuestion
-            send={send}
-            value={current.value}
-            context={current.context.answers}
-          >
-            {meta.question.question}
-          </YesNoQuestion>
-        </Box>
-      )
-    } else if (meta.question.type === `textarea`) {
-      Screen = () => (
-        <Box>
-          <Label>{meta.question.question}</Label>
-          <Textarea name="request" rows="4" mb={3} />
-        </Box>
-      )
-    }
-  }
+  // useEffect(() => {
+  // console.log(`mounted`)
+  // // Specify how to clean up after this effect:
+  // return function cleanup() {
+  // console.log(`unmounted`)
+  // }
+  // })
 
   return (
-    <Layout>
-      <Router>
-        <Welcome path="/new-game/" />
-        <Question path="/new-game/question/*" />
-      </Router>
-    </Layout>
-  )
-
-  return (
-    <Layout>
-      <SEO title="New Nope game" />
-      <Styled.h1>New Game</Styled.h1>
-      <Styled.p>
-        Welcome to the Nope Game! This game can help you decide whether to say
-        yes or no to someone’s request, and how strongly to say yes or no
-      </Styled.p>
-      <Box as="form" onSubmit={e => e.preventDefault()}>
-        <YesNoQuestion>Do you know what is being asked of you?</YesNoQuestion>
-        <Box>
-          <Label>Please describe the request.</Label>
-          <Textarea name="request" rows="4" mb={3} />
-        </Box>
-        <YesNoQuestion>
-          Can you do the thing being requested of you?
-        </YesNoQuestion>
-        <YesNoQuestion>
-          Am I required by law or moral code to give or do what is wanted, or
-          does saying no violate this person’s rights?
-        </YesNoQuestion>
-        <YesNoQuestion>
-          Is the other person responsible for telling me what to do?
-        </YesNoQuestion>
-        <YesNoQuestion>
-          Is what the person is requesting of me appropriate to my relationship
-          with this person?
-        </YesNoQuestion>
-        <YesNoQuestion>
-          Is my relationship more important than saying no?
-        </YesNoQuestion>
-        <YesNoQuestion>
-          Will saying no make me feel bad about myself (because it’s against my
-          values to say no to this)?
-        </YesNoQuestion>
-        <YesNoQuestion>
-          Do I owe this person a favor? (Does the person do a lot for me?)
-        </YesNoQuestion>
-        <YesNoQuestion>
-          In the long term, will I regret saying no?
-        </YesNoQuestion>
-        <YesNoQuestion>
-          Should I wait a while before saying no because the timing isn’t great
-          right now?
-        </YesNoQuestion>
-        <Button>Submit</Button>
-        <Styled.p>Well done! You’ve answered all the questions.</Styled.p>
+    <Layout scenario={current.context.scenario}>
+      <Welcome key="welcome" />
+      <Question service={service} />
+      <DoneScreen />
+      <Box>
+        {current.value !== `welcome` &&
+          Object.values(current.context.answers).length + ` / 10 answered`}
       </Box>
     </Layout>
   )

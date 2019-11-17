@@ -7,7 +7,7 @@ import "normalize.css"
 
 import Header from "./header"
 
-const Layout = ({ children }) => {
+const Layout = ({ children, scenario }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
 
   return (
     <Styled.root>
-      <Header siteTitle={data.site.siteMetadata.title} />
+      <Header scenario={scenario} siteTitle={data.site.siteMetadata.title} />
       <div
         sx={{
           margin: `0 auto`,

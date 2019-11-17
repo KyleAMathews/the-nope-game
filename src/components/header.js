@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
 
-const Header = ({ siteTitle }) => (
+const Header = ({ siteTitle, scenario }) => (
   <Styled.div
     as="header"
     sx={{
@@ -31,6 +31,7 @@ const Header = ({ siteTitle }) => (
           {siteTitle}
         </Link>
       </Styled.h1>
+      <Styled.p sx={{ color: `muted` }}>{scenario}</Styled.p>
     </div>
   </Styled.div>
 )
