@@ -20,23 +20,22 @@ const Layout = ({ children, scenario }) => {
 
   return (
     <Styled.root>
-      <Header scenario={scenario} siteTitle={data.site.siteMetadata.title} />
-      <div
-        sx={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: 3,
-          paddingTop: 0,
-        }}
-      >
-        <main>{children}</main>
-        <footer>
-          <Styled.p>
-            © {new Date().getFullYear()}, Built with
-            {` `}
-            <a href="https://www.gatsbyjs.org">Gatsby</a>
-          </Styled.p>
-        </footer>
+      <div sx={{ display: `flex`, flexDirection: `column`, height: `100vh` }}>
+        <Header
+          sx={{ flex: 1 }}
+          scenario={scenario}
+          siteTitle={data.site.siteMetadata.title}
+        />
+        <div
+          sx={{
+            display: `flex`,
+            alignItems: `center`,
+            justifyContent: `center`,
+            flex: 1,
+          }}
+        >
+          <main sx={{ width: `75%` }}>{children}</main>
+        </div>
       </div>
     </Styled.root>
   )

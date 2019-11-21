@@ -36,9 +36,23 @@ const machine = Machine(
           },
         },
         on: {
+          NEXT: "describeRequest",
+        },
+      },
+      describeRequest: {
+        meta: {
+          question: {
+            type: "textarea",
+            question: "Please describe the request.",
+            helpText:
+              "If you can't easily describe the request, this might be a good time to pause and ask the person what they are requesting of you.",
+          },
+        },
+        on: {
           SET_SCENARIO: {
             actions: `setScenario`,
           },
+          PREV: `welcome`,
           NEXT: "doYouKnow",
         },
       },
@@ -52,8 +66,8 @@ const machine = Machine(
           },
         },
         on: {
-          NEXT: "describeRequest",
-          PREV: `welcome`,
+          NEXT: "moralOrLaw",
+          PREV: `describeRequest`,
           YES: {
             actions: "setYes",
           },
@@ -62,29 +76,14 @@ const machine = Machine(
           },
         },
       },
-      getClarification: {
-        meta: {
-          // Or just make this its own component.
-          message: `Since you answered no, this might be a good time to pause and ask the person what they are requesting of you.
-        If you decide to continue without asking the person for clarification right now, your results may be less helpful.`,
-        },
-      },
-      describeRequest: {
-        meta: {
-          question: {
-            type: "textarea",
-            question: "Please describe the request.",
-          },
-        },
-        on: {
-          SET_SCENARIO: {
-            actions: `setScenario`,
-          },
-          PREV: `doYouKnow`,
-          NEXT: "canYouDo",
-        },
-      },
       canYouDo: {
+        getClarification: {
+          meta: {
+            // Or just make this its own component.
+            message: `Since you answered no, this might be a good time to pause and ask the person what they are requesting of you.
+        If you decide to continue without asking the person for clarification right now, your results may be less helpful.`,
+          },
+        },
         meta: {
           question: {
             type: "yes/no",
@@ -111,7 +110,7 @@ const machine = Machine(
           },
         },
         on: {
-          PREV: `canYouDo`,
+          PREV: `doYouKnow`,
           NEXT: "whoIsResponsible",
           YES: {
             actions: "setYes",

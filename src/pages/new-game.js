@@ -31,14 +31,20 @@ import SEO from "../components/seo"
 // Question pulls off questions from the state machine.
 //
 
-const YesNoQuestion = ({ children, context, value, send }) => {
+const YesNoQuestion = ({ children, context, value, send, current }) => {
   console.log(`YesNoQuestion context`, context)
   console.log(`YesNoQuestion value`, value)
   return (
     <Box as="form" mb={3} onSubmit={e => e.preventDefault()}>
-      <Label>{children}</Label>
+      <Label sx={{ mb: 1 }}>{children}</Label>
       <Label htmlFor="yes" onClick={e => send({ type: `YES`, value })}>
         <Radio
+          ref={input =>
+            input &&
+            (current.event.type === `NEXT` || current.event.type === `PREV`) &&
+            typeof context[value] === `undefined` &&
+            input.focus()
+          }
           name="yes"
           value="yes"
           onChange={e => send({ type: `YES`, value })}
@@ -55,7 +61,9 @@ const YesNoQuestion = ({ children, context, value, send }) => {
         />{" "}
         No
       </Label>
-      <Button onClick={() => send(`NEXT`)}>Continue</Button>
+      <Button sx={{ mt: 3 }} onClick={() => send(`NEXT`)}>
+        Continue
+      </Button>
     </Box>
   )
 }
@@ -78,6 +86,7 @@ const Question = ({ service }) => {
           send={send}
           value={current.value}
           context={current.context.answers}
+          current={current}
         >
           {meta.question.question}
         </YesNoQuestion>
@@ -86,7 +95,7 @@ const Question = ({ service }) => {
   } else if (meta.question.type === `textarea`) {
     return (
       <Box>
-        <Label>{meta.question.question}</Label>
+        <Label sx={{ mb: 1 }}>{meta.question.question}</Label>
         <Textarea
           value={current.context.scenario}
           onChange={e => send({ type: `SET_SCENARIO`, value: e.target.value })}
@@ -158,23 +167,25 @@ const IndexPage = () => {
     }
   })
 
-  // useEffect(() => {
-  // console.log(`mounted`)
-  // // Specify how to clean up after this effect:
-  // return function cleanup() {
-  // console.log(`unmounted`)
-  // }
-  // })
-
   return (
     <Layout scenario={current.context.scenario}>
-      <Welcome key="welcome" />
-      <Question service={service} />
-      <DoneScreen />
-      <Box>
-        {current.value !== `welcome` &&
-          Object.values(current.context.answers).length + ` / 10 answered`}
-      </Box>
+      <div
+        sx={{
+          flexDirection: `column`,
+          // width: `50%`,
+          margin: `0 auto`,
+        }}
+      >
+        <Welcome key="welcome" />
+        <Question service={service} />
+        <DoneScreen />
+        <Box>
+          {current.value !== `welcome` &&
+            Object.values(current.context.answers).length +
+              (current.context.scenario ? 1 : 0) +
+              ` / 10 answered`}
+        </Box>
+      </div>
     </Layout>
   )
 }

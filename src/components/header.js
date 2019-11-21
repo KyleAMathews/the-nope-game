@@ -6,10 +6,10 @@ import React from "react"
 
 const Header = ({ siteTitle, scenario }) => (
   <Styled.div
+    g
     as="header"
     sx={{
       background: `background`,
-      marginBottom: 4,
     }}
   >
     <div
