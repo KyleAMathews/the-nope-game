@@ -20,7 +20,7 @@ const Layout = ({ children, scenario }) => {
 
   return (
     <Styled.root>
-      <div sx={{ display: `flex`, flexDirection: `column`, height: `100vh` }}>
+      <div sx={{ display: `flex`, flexDirection: `column` }}>
         <Header
           sx={{ flex: 1 }}
           scenario={scenario}

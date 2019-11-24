@@ -14,6 +14,7 @@ import {
   Slider,
 } from "@theme-ui/components"
 import hotkeys from "hotkeys-js"
+import { motion, AnimatePresence } from "framer-motion"
 
 import ServiceContext from "../service-context"
 
@@ -30,21 +31,30 @@ import SEO from "../components/seo"
 //
 // Question pulls off questions from the state machine.
 //
+// TODO
+// - done screen
+// - results screen
+// - only save yes/no when press CONTINUE
+//
 
 const YesNoQuestion = ({ children, context, value, send, current }) => {
   console.log(`YesNoQuestion context`, context)
   console.log(`YesNoQuestion value`, value)
   return (
-    <Box as="form" mb={3} onSubmit={e => e.preventDefault()}>
+    <Box
+      as="form"
+      mb={3}
+      onSubmit={e => e.preventDefault()}
+      ref={input =>
+        input &&
+        (current.event.type === `NEXT` || current.event.type === `PREV`) &&
+        typeof context[value] === `undefined` &&
+        input.focus()
+      }
+    >
       <Label sx={{ mb: 1 }}>{children}</Label>
       <Label htmlFor="yes" onClick={e => send({ type: `YES`, value })}>
         <Radio
-          ref={input =>
-            input &&
-            (current.event.type === `NEXT` || current.event.type === `PREV`) &&
-            typeof context[value] === `undefined` &&
-            input.focus()
-          }
           name="yes"
           value="yes"
           onChange={e => send({ type: `YES`, value })}
@@ -69,27 +79,40 @@ const YesNoQuestion = ({ children, context, value, send, current }) => {
 }
 
 const Question = ({ service }) => {
+  console.log(`inside Question`)
   const { current, send } = service
-  console.log(`current`, current.value, current)
+  console.log(`QUESTION: current`, current.value, current)
   const meta = Object.values(current.meta)[0]
   console.log({ meta })
 
   // Ignore welcome screen
-  if (current.value === `isDone` || meta.welcome) return null
+  if (
+    current.value.playing === `isDone` ||
+    current.value === `inactive` ||
+    meta.welcome
+  )
+    return null
 
   // Create the current screen.
   let Screen
   if (meta.question.type === `yes/no`) {
     return (
       <Box>
-        <YesNoQuestion
-          send={send}
-          value={current.value}
-          context={current.context.answers}
-          current={current}
+        <motion.div
+          key={current.value.playing}
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
         >
-          {meta.question.question}
-        </YesNoQuestion>
+          <YesNoQuestion
+            send={send}
+            value={current.value.playing}
+            context={current.context.answers}
+            current={current}
+          >
+            {meta.question.question}
+          </YesNoQuestion>
+        </motion.div>
       </Box>
     )
   } else if (meta.question.type === `textarea`) {
@@ -111,7 +134,7 @@ const Question = ({ service }) => {
 const Welcome = () => {
   const service = useContext(ServiceContext)
   const send = service.send
-  if (service.current.value === `welcome`) {
+  if (service.current.value.playing === `welcome`) {
     return (
       <Box>
         <Styled.h1>New Game</Styled.h1>
@@ -119,7 +142,7 @@ const Welcome = () => {
           Welcome to the Nope Game! This game can help you decide whether to say
           yes or no to someone’s request, and how strongly to say yes or no
         </Styled.p>
-        <Button onClick={() => send(`NEXT`)}>Start the Game</Button>
+        <Button onClick={() => send(`NEXT`)}>Start Game</Button>
       </Box>
     )
   } else {
@@ -129,7 +152,7 @@ const Welcome = () => {
 
 const DoneScreen = () => {
   const service = useContext(ServiceContext)
-  if (service.current.value === `isDone`) {
+  if (service.current.value.playing === `isDone`) {
     return (
       <Box>
         <Styled.h1>Game Finished</Styled.h1>
@@ -172,19 +195,16 @@ const IndexPage = () => {
       <div
         sx={{
           flexDirection: `column`,
-          // width: `50%`,
           margin: `0 auto`,
+          py: 5,
         }}
       >
+        {current.value === `inactive` && (
+          <Button onClick={() => send(`START_GAME`)}>Start Game</Button>
+        )}
         <Welcome key="welcome" />
         <Question service={service} />
         <DoneScreen />
-        <Box>
-          {current.value !== `welcome` &&
-            Object.values(current.context.answers).length +
-              (current.context.scenario ? 1 : 0) +
-              ` / 10 answered`}
-        </Box>
       </div>
     </Layout>
   )
