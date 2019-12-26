@@ -32,7 +32,6 @@ const gameStates = {
       },
     },
     describeRequest: {
-      exit: `copyTempValues`,
       meta: {
         question: {
           type: "textarea",
@@ -50,7 +49,8 @@ const gameStates = {
       },
     },
     doYouKnow: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `doYouKnow` }), `copyPermValuesToTemp`],
       meta: {
         path: `/new-game/question/1`,
         question: {
@@ -69,20 +69,13 @@ const gameStates = {
         },
       },
     },
-    getClarification: {
-      exit: `copyTempValues`,
-      meta: {
-        // Or just make this its own component.
-        message: `Since you answered no, this might be a good time to pause and ask the person what they are requesting of you.
-        If you decide to continue without asking the person for clarification right now, your results may be less helpful.`,
-      },
-    },
     canYouDo: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `canYouDo` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
-          question: "Can you do the thing being requested of you?",
+          question: "Can I do the thing being requested of me?",
         },
       },
       on: {
@@ -97,7 +90,8 @@ const gameStates = {
       },
     },
     moralOrLaw: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `moralOrLaw` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
@@ -116,7 +110,11 @@ const gameStates = {
       },
     },
     whoIsResponsible: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [
+        assign({ entryState: `whoIsResponsible` }),
+        `copyPermValuesToTemp`,
+      ],
       meta: {
         question: {
           type: "yes/no",
@@ -135,7 +133,8 @@ const gameStates = {
       },
     },
     appropriate: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `appropriate` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
@@ -154,7 +153,8 @@ const gameStates = {
       },
     },
     howImportant: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `howImportant` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
@@ -173,7 +173,8 @@ const gameStates = {
       },
     },
     againstValues: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `againstValues` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
@@ -194,7 +195,8 @@ const gameStates = {
       },
     },
     oweFavor: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `oweFavor` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
@@ -213,7 +215,8 @@ const gameStates = {
       },
     },
     longTermRegret: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `longTermRegret` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
@@ -232,7 +235,8 @@ const gameStates = {
       },
     },
     timingBad: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: [assign({ entryState: `timingBad` }), `copyPermValuesToTemp`],
       meta: {
         question: {
           type: "yes/no",
@@ -289,18 +293,23 @@ const machine = Machine(
         return context
       }),
       setYes: assign((context, event) => {
-        delete context.answers[event.value]
         context.tempAnswers[event.value] = event.type
         return context
       }),
       setNo: assign((context, event) => {
-        delete context.answers[event.value]
         context.tempAnswers[event.value] = event.type
         return context
       }),
-      copyTempValues: assign((context, event) => {
+      copyTempValuesToPerm: assign((context, event) => {
         context.answers = { ...context.answers, ...context.tempAnswers }
         context.tempAnswers = {}
+        return context
+      }),
+      copyPermValuesToTemp: assign((context, event, actionMeta) => {
+        const question = context.entryState
+        if (context.answers[question]) {
+          context.tempAnswers[question] = context.answers[question]
+        }
         return context
       }),
     },
