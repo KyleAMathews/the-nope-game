@@ -57,10 +57,7 @@ const YesNoQuestion = ({ children, context, value, send, current, meta }) => {
           name="yes"
           value="yes"
           onChange={e => send({ type: `YES`, value })}
-          checked={
-            context.answers[value] === `YES` ||
-            context.tempAnswers[value] === `YES`
-          }
+          checked={context.tempAnswers[value] === `YES`}
         />{" "}
         Yes
       </Label>
@@ -69,10 +66,7 @@ const YesNoQuestion = ({ children, context, value, send, current, meta }) => {
           name="no"
           value="no"
           onChange={() => send({ type: `NO`, value })}
-          checked={
-            context.answers[value] === `NO` ||
-            context.tempAnswers[value] === `NO`
-          }
+          checked={context.tempAnswers[value] === `NO`}
         />{" "}
         No
       </Label>

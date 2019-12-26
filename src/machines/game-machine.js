@@ -32,7 +32,8 @@ const gameStates = {
       },
     },
     describeRequest: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "textarea",
@@ -50,7 +51,8 @@ const gameStates = {
       },
     },
     doYouKnow: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         path: `/new-game/question/1`,
         question: {
@@ -70,7 +72,8 @@ const gameStates = {
       },
     },
     getClarification: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         // Or just make this its own component.
         message: `Since you answered no, this might be a good time to pause and ask the person what they are requesting of you.
@@ -78,7 +81,8 @@ const gameStates = {
       },
     },
     canYouDo: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -97,7 +101,8 @@ const gameStates = {
       },
     },
     moralOrLaw: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -116,7 +121,8 @@ const gameStates = {
       },
     },
     whoIsResponsible: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -135,7 +141,8 @@ const gameStates = {
       },
     },
     appropriate: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -154,7 +161,8 @@ const gameStates = {
       },
     },
     howImportant: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -173,7 +181,8 @@ const gameStates = {
       },
     },
     againstValues: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -194,7 +203,8 @@ const gameStates = {
       },
     },
     oweFavor: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -213,7 +223,8 @@ const gameStates = {
       },
     },
     longTermRegret: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -232,7 +243,8 @@ const gameStates = {
       },
     },
     timingBad: {
-      exit: `copyTempValues`,
+      exit: `copyTempValuesToPerm`,
+      entry: `copyPermValuesToTemp`,
       meta: {
         question: {
           type: "yes/no",
@@ -289,18 +301,24 @@ const machine = Machine(
         return context
       }),
       setYes: assign((context, event) => {
-        delete context.answers[event.value]
         context.tempAnswers[event.value] = event.type
         return context
       }),
       setNo: assign((context, event) => {
-        delete context.answers[event.value]
         context.tempAnswers[event.value] = event.type
         return context
       }),
-      copyTempValues: assign((context, event) => {
+      copyTempValuesToPerm: assign((context, event) => {
         context.answers = { ...context.answers, ...context.tempAnswers }
         context.tempAnswers = {}
+        return context
+      }),
+      copyPermValuesToTemp: assign((context, event, actionMeta) => {
+        console.log({ context, event, actionMeta })
+        const question = actionMeta.state.value.playing
+        if (context.answers[question]) {
+          context.tempAnswers[question] = context.answers[question]
+        }
         return context
       }),
     },
