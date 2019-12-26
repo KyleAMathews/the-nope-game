@@ -34,7 +34,6 @@ import SEO from "../components/seo"
 // TODO
 // - done screen
 // - results screen
-// - only save yes/no when press CONTINUE
 //
 
 const YesNoQuestion = ({ children, context, value, send, current }) => {
@@ -58,7 +57,10 @@ const YesNoQuestion = ({ children, context, value, send, current }) => {
           name="yes"
           value="yes"
           onChange={e => send({ type: `YES`, value })}
-          checked={context[value] === `YES`}
+          checked={
+            context.answers[value] === `YES` ||
+            context.tempAnswers[value] === `YES`
+          }
         />{" "}
         Yes
       </Label>
@@ -67,7 +69,10 @@ const YesNoQuestion = ({ children, context, value, send, current }) => {
           name="no"
           value="no"
           onChange={() => send({ type: `NO`, value })}
-          checked={context[value] === `NO`}
+          checked={
+            context.answers[value] === `NO` ||
+            context.tempAnswers[value] === `NO`
+          }
         />{" "}
         No
       </Label>
@@ -107,7 +112,7 @@ const Question = ({ service }) => {
           <YesNoQuestion
             send={send}
             value={current.value.playing}
-            context={current.context.answers}
+            context={current.context}
             current={current}
           >
             {meta.question.question}

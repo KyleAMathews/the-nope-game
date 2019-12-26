@@ -1,8 +1,6 @@
 import { Machine, assign } from "xstate"
 import * as gatsby from "gatsby"
 
-console.log(gatsby)
-
 // Guard to prevent final submission if not all
 // questions have been answered. Maybe last screen
 // links them to the ones they haven't answered if that's the case?
@@ -34,6 +32,7 @@ const gameStates = {
       },
     },
     describeRequest: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "textarea",
@@ -51,7 +50,7 @@ const gameStates = {
       },
     },
     doYouKnow: {
-      // entry: `setRoute`,
+      exit: `copyTempValues`,
       meta: {
         path: `/new-game/question/1`,
         question: {
@@ -71,6 +70,7 @@ const gameStates = {
       },
     },
     getClarification: {
+      exit: `copyTempValues`,
       meta: {
         // Or just make this its own component.
         message: `Since you answered no, this might be a good time to pause and ask the person what they are requesting of you.
@@ -78,6 +78,7 @@ const gameStates = {
       },
     },
     canYouDo: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -96,6 +97,7 @@ const gameStates = {
       },
     },
     moralOrLaw: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -115,6 +117,7 @@ const gameStates = {
       },
     },
     whoIsResponsible: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -133,6 +136,7 @@ const gameStates = {
       },
     },
     appropriate: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -151,6 +155,7 @@ const gameStates = {
       },
     },
     howImportant: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -169,6 +174,7 @@ const gameStates = {
       },
     },
     againstValues: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -188,6 +194,7 @@ const gameStates = {
       },
     },
     oweFavor: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -206,6 +213,7 @@ const gameStates = {
       },
     },
     longTermRegret: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -224,6 +232,7 @@ const gameStates = {
       },
     },
     timingBad: {
+      exit: `copyTempValues`,
       meta: {
         question: {
           type: "yes/no",
@@ -256,6 +265,7 @@ const machine = Machine(
     id: "nopeGameMachine",
     context: {
       answers: {},
+      tempAnswers: {},
     },
     initial: `inactive`,
     states: {
@@ -274,13 +284,8 @@ const machine = Machine(
   },
   {
     actions: {
-      // setRoute: (context, event, meta) => {
-      // console.log(`setRoute`, { context, event, meta })
-      // console.log(Object.values(meta.state.meta)[0].path)
-      // gatsby.navigate(Object.values(meta.state.meta)[0].path)
-      // },
       setYes: assign((context, event) => {
-        context.answers[event.value] = event.type
+        context.tempAnswers[event.value] = event.type
         return context
       }),
       setScenario: assign((context, event) => {
@@ -288,7 +293,12 @@ const machine = Machine(
         return context
       }),
       setNo: assign((context, event) => {
-        context.answers[event.value] = event.type
+        context.tempAnswers[event.value] = event.type
+        return context
+      }),
+      copyTempValues: assign((context, event) => {
+        context.answers = { ...context.answers, ...context.tempAnswers }
+        context.tempAnswers = {}
         return context
       }),
     },
