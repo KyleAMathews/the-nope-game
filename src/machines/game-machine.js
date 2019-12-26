@@ -36,9 +36,9 @@ const gameStates = {
       meta: {
         question: {
           type: "textarea",
-          question: "Please describe the request.",
+          question: "What is someone requesting me to do, think, or feel?",
           helpText:
-            "If you can't easily describe the request, this might be a good time to pause and ask the person what they are requesting of you.",
+            "<p>Note: If it’s difficult to describe the request, consider asking the person to clarify their request.</p> <p>If you decide to continue without asking the person for clarification right now, your results may be less helpful.</p>",
         },
       },
       on: {
@@ -101,8 +101,7 @@ const gameStates = {
       meta: {
         question: {
           type: "yes/no",
-          question: `Am I required by law or moral code to give or do what is wanted, or does
-        saying no violate this person’s rights?`,
+          question: `Am I required by law or moral code to give or do what is wanted?`,
         },
       },
       on: {
@@ -121,7 +120,7 @@ const gameStates = {
       meta: {
         question: {
           type: "yes/no",
-          question: `Is the other person responsible for telling me what to do?`,
+          question: `Does the other person possess any kind of formal authority that permits them to tell me what to do or ask me to do things?`,
         },
       },
       on: {
@@ -159,7 +158,7 @@ const gameStates = {
       meta: {
         question: {
           type: "yes/no",
-          question: `Is my relationship more important than saying no?`,
+          question: `Is saying no to the request more important than my relationship?`,
         },
       },
       on: {
@@ -178,8 +177,9 @@ const gameStates = {
       meta: {
         question: {
           type: "yes/no",
-          question: `Will saying no make me feel bad about myself (because it’s against my
-        values to say no to this)?`,
+          question: `Will saying no make me feel bad about myself?`,
+          helpText:
+            "<p>Note: Usually you should only feel bad if it is against your values to say no to this request.</p>",
         },
       },
       on: {
@@ -284,15 +284,17 @@ const machine = Machine(
   },
   {
     actions: {
-      setYes: assign((context, event) => {
-        context.tempAnswers[event.value] = event.type
-        return context
-      }),
       setScenario: assign((context, event) => {
         context.scenario = event.value
         return context
       }),
+      setYes: assign((context, event) => {
+        delete context.answers[event.value]
+        context.tempAnswers[event.value] = event.type
+        return context
+      }),
       setNo: assign((context, event) => {
+        delete context.answers[event.value]
         context.tempAnswers[event.value] = event.type
         return context
       }),

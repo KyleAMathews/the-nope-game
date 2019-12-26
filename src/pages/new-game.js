@@ -36,9 +36,9 @@ import SEO from "../components/seo"
 // - results screen
 //
 
-const YesNoQuestion = ({ children, context, value, send, current }) => {
+const YesNoQuestion = ({ children, context, value, send, current, meta }) => {
   console.log(`YesNoQuestion context`, context)
-  console.log(`YesNoQuestion value`, value)
+  console.log(`YesNoQuestion value`, value, meta)
   return (
     <Box
       as="form"
@@ -79,6 +79,7 @@ const YesNoQuestion = ({ children, context, value, send, current }) => {
       <Button sx={{ mt: 3 }} onClick={() => send(`NEXT`)}>
         Continue
       </Button>
+      <div dangerouslySetInnerHTML={{ __html: meta.question.helpText }} />
     </Box>
   )
 }
@@ -114,6 +115,7 @@ const Question = ({ service }) => {
             value={current.value.playing}
             context={current.context}
             current={current}
+            meta={meta}
           >
             {meta.question.question}
           </YesNoQuestion>
@@ -132,6 +134,7 @@ const Question = ({ service }) => {
           mb={3}
         />
         <Button onClick={() => send(`NEXT`)}>Continue</Button>
+        <div dangerouslySetInnerHTML={{ __html: meta.question.helpText }} />
       </Box>
     )
   }
