@@ -9,7 +9,7 @@ import ServiceContext from "../service-context"
 
 const Header = ({ siteTitle, scenario }) => {
   const service = useContext(ServiceContext)
-  if (service.current.value === `inactive`) {
+  if (typeof service === `undefined` || service.current.value === `inactive`) {
     return (
       <Styled.div
         g
