@@ -258,9 +258,14 @@ const gameStates = {
     isDone: {
       on: {
         PREV: `timingBad`,
+        NEXT: "summaryScreen",
       },
     },
-    summaryScreen: {},
+    summaryScreen: {
+      on: {
+        PREV: `isDone`,
+      },
+    },
   },
 }
 

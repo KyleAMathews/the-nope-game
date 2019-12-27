@@ -88,6 +88,7 @@ const Question = ({ service }) => {
   // Ignore welcome screen
   if (
     current.value.playing === `isDone` ||
+    current.value.playing === `summaryScreen` ||
     current.value === `inactive` ||
     meta.welcome
   )
@@ -154,11 +155,45 @@ const Welcome = () => {
 
 const DoneScreen = () => {
   const service = useContext(ServiceContext)
+  const { current, send } = service
   if (service.current.value.playing === `isDone`) {
     return (
       <Box>
-        <Styled.h1>Game Finished</Styled.h1>
-        <pre>{JSON.stringify(service.current.context.answers, null, 4)}</pre>
+        <Styled.p>Well done! You’ve answered all the questions.</Styled.p>
+        <Button onClick={() => send(`NEXT`)}>See Results</Button>
+      </Box>
+    )
+  } else {
+    return null
+  }
+}
+
+const SummaryScreen = () => {
+  const service = useContext(ServiceContext)
+  const answers = service.current.context.answers
+  if (service.current.value.playing === `summaryScreen`) {
+    const directives = [
+      `do it without being asked.`,
+      `not complain; do it cheerfully.`,
+      `do it, even if you’re not cheerful about it.`,
+      `do it, but show that you’d rather not.`,
+      `say you’d rather not, but do it gracefully.`,
+      `say no firmly, but reconsider.`,
+      `say no confidently; resist saying yes.`,
+      `say no firmly; resist saying yes.`,
+      `say no firmly; resist; negotiate.`,
+      `not do it.`,
+    ]
+
+    const numberOfYes = Object.values(answers).filter(a => a === `YES`).length
+    console.log({ numberOfYes })
+
+    return (
+      <Box>
+        <Styled.p>
+          Based on your answers to the questions, you ought to{" "}
+          {directives[numberOfYes]}
+        </Styled.p>
       </Box>
     )
   } else {
@@ -207,6 +242,7 @@ const IndexPage = () => {
         <Welcome key="welcome" />
         <Question service={service} />
         <DoneScreen />
+        <SummaryScreen />
       </div>
     </Layout>
   )
