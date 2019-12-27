@@ -124,6 +124,7 @@ const Question = ({ service }) => {
         <Textarea
           value={current.context.scenario}
           onChange={e => send({ type: `SET_SCENARIO`, value: e.target.value })}
+          placeholder={meta.question.placeholder}
           name="request"
           rows="4"
           mb={3}

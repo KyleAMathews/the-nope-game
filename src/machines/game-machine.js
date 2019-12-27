@@ -36,6 +36,7 @@ const gameStates = {
         question: {
           type: "textarea",
           question: "What is someone requesting me to do, think, or feel?",
+          placeholder: "My neighbor wants me to walk his dog tomorrow night",
           helpText:
             "<p>Note: If it’s difficult to describe the request, consider asking the person to clarify their request.</p> <p>If you decide to continue without asking the person for clarification right now, your results may be less helpful.</p>",
         },
