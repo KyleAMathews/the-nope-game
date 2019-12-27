@@ -186,14 +186,13 @@ const SummaryScreen = () => {
       `not do it.`,
     ]
 
-    const numberOfYes = Object.values(answers).filter(a => a === `YES`).length
-    console.log({ numberOfYes })
+    const numberOfNOs = Object.values(answers).filter(a => a === `NO`).length
 
     return (
       <Box>
         <Styled.p>
           Based on your answers to the questions, you ought to{" "}
-          {directives[numberOfYes]}
+          {directives[numberOfNOs]}
         </Styled.p>
       </Box>
     )
