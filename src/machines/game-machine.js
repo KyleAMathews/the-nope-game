@@ -159,7 +159,7 @@ const gameStates = {
       meta: {
         question: {
           type: "yes/no",
-          question: `Is saying no to the request more important than my relationship?`,
+          question: `If I say no to this request, will it harm this relationship more than I want it to be harmed right now.`,
         },
       },
       on: {
