@@ -44,9 +44,18 @@ const Header = ({ siteTitle, scenario }) => {
     let answerCount = Object.values(service.current.context.answers).length
     if (scenario) answerCount += 1
 
+    let scenarioTxt
+    if (scenario) {
+      scenarioTxt = `"${scenario}"`
+    }
+
     return (
       <Box>
-        <Styled.p sx={{ my: 2, px: 2 }}>Request: {scenario}</Styled.p>
+        <Styled.p sx={{ my: 2, px: 2 }}>
+          {scenarioTxt && `Request:`}
+          {` `}
+          {scenarioTxt}
+        </Styled.p>
         <div
           sx={{
             transition: `width 0.333s ease-in-out`,

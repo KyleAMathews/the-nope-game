@@ -43,8 +43,8 @@ const YesNoQuestion = ({ children, context, value, send, current, meta }) => {
     <Box
       as="form"
       mb={3}
-      onSubmit={e => e.preventDefault()}
-      ref={input =>
+      onSubmit={(e) => e.preventDefault()}
+      ref={(input) =>
         input &&
         (current.event.type === `NEXT` || current.event.type === `PREV`) &&
         typeof context[value] === `undefined` &&
@@ -52,11 +52,11 @@ const YesNoQuestion = ({ children, context, value, send, current, meta }) => {
       }
     >
       <Label sx={{ mb: 1 }}>{children}</Label>
-      <Label htmlFor="yes" onClick={e => send({ type: `YES`, value })}>
+      <Label htmlFor="yes" onClick={(e) => send({ type: `YES`, value })}>
         <Radio
           name="yes"
           value="yes"
-          onChange={e => send({ type: `YES`, value })}
+          onChange={(e) => send({ type: `YES`, value })}
           checked={context.tempAnswers[value] === `YES`}
         />{" "}
         Yes
@@ -123,7 +123,9 @@ const Question = ({ service }) => {
         <Label sx={{ mb: 1 }}>{meta.question.question}</Label>
         <Textarea
           value={current.context.scenario}
-          onChange={e => send({ type: `SET_SCENARIO`, value: e.target.value })}
+          onChange={(e) =>
+            send({ type: `SET_SCENARIO`, value: e.target.value })
+          }
           placeholder={meta.question.placeholder}
           name="request"
           rows="4"
@@ -186,7 +188,7 @@ const SummaryScreen = () => {
       `not do it.`,
     ]
 
-    const numberOfNOs = Object.values(answers).filter(a => a === `NO`).length
+    const numberOfNOs = Object.values(answers).filter((a) => a === `NO`).length
 
     return (
       <Box>
