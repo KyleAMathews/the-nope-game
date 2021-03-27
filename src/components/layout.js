@@ -22,19 +22,21 @@ const Layout = ({ children, scenario }) => {
     <Styled.root>
       <div sx={{ display: `flex`, flexDirection: `column` }}>
         <Header
-          sx={{ flex: 1 }}
+          // sx={{ flex: 1 }}
           scenario={scenario}
           siteTitle={data.site.siteMetadata.title}
         />
         <div
-          sx={{
-            display: `flex`,
-            alignItems: `center`,
-            justifyContent: `center`,
-            flex: 1,
-          }}
+          sx={
+            {
+              // display: `flex`,
+              // alignItems: `center`,
+              // justifyContent: `center`,
+              // flex: 1,
+            }
+          }
         >
-          <main sx={{ width: `75%` }}>{children}</main>
+          <main sx={{ px: 4, py: 3 }}>{children}</main>
         </div>
       </div>
     </Styled.root>
