@@ -22,8 +22,7 @@ const IndexPage = () => {
       <Styled.p>
         <Button
           onClick={() => {
-            send(`START_GAME`)
-            navigate(`/new-game/`)
+            navigate(`/game/`)
           }}
         >
           Start new game
