@@ -46,31 +46,63 @@ function Button({ children, isSelected, onClick }) {
 }
 
 function YesNoQuestion({ question, dispatch, index, state }) {
+  const showWarnIfNot = question.warnIfNo && state === `no`
+  console.log({ showWarnIfNot })
   return (
     <div
       sx={{
-        display: `flex`,
-        justifyContent: `space-between`,
-        mb: 3,
-        height: 52,
+        background: showWarnIfNot ? `lightpink` : `none`,
+        p: 2,
       }}
     >
-      <label sx={{ pt: 1 }}>{question}</label>
-      <ButtonGroup dispatch={dispatch} index={index} state={state} />
+      <div
+        sx={{
+          display: `flex`,
+          justifyContent: `space-between`,
+          height: 52,
+        }}
+      >
+        <label sx={{ pt: 1 }}>{question.question}</label>
+        <ButtonGroup dispatch={dispatch} index={index} state={state} />
+      </div>
+      <Themed.div sx={{ fontStyle: `italic` }}>
+        {showWarnIfNot ? question.warnIfNo : ``}
+      </Themed.div>
     </div>
   )
 }
 
 const questions = [
-  "Can I do the thing being requested of me?",
-  "Am i required by law or moral code to give or do what is wanted?",
-  "Does the other person possess any kind of formal authority that permits them to tell me what to do or ask me to do things?",
-  "Is what the person is requesting of me appropriate to my relationship with this person?",
-  "Do I want to fulfill this request to avoid harming this relationship?",
-  "Will saying no make me feel bad about myself?",
-  "Do I owe this person a favor? (Does the person do a lot for me?)",
-  "In the long term, will I regret saying no?",
-  "Should I wait a while before saying no because the timing isn't great right now?",
+  {
+    question: "Is the request clear?",
+    warnIfNo: `If you don't fully understand the person's request, you should ask questions to clarify what they want before answering`,
+  },
+  {
+    question: "Can I do the thing being requested of me?",
+    warnIfNo: `If you can't actually do the thing requested, your answer to the person is almost certainly "no"`,
+  },
+  {
+    question:
+      "Am i required by law or moral code to give or do what is wanted?",
+  },
+  {
+    question:
+      "Does the other person possess any kind of formal authority that permits them to tell me what to do or ask me to do things?",
+  },
+  {
+    question:
+      "Is what the person is requesting of me appropriate to my relationship with this person?",
+  },
+  {
+    question:
+      "Do I want to fulfill this request to avoid harming this relationship?",
+  },
+  { question: "Will saying no make me feel bad about myself?" },
+  {
+    question:
+      "Do I owe this person a favor? (Does the person do a lot for me?)",
+  },
+  { question: "In the long term, will I regret saying no?" },
 ]
 
 const directives = [
