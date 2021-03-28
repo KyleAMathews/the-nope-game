@@ -35,8 +35,8 @@ function Button({ children, isSelected, onClick }) {
         background: isSelected ? `gray` : `none`,
         outline: `none`,
         font: `inherit`,
-        color: isSelected ? `white` : `inherit`,
-        border: `1px solid`,
+        color: isSelected ? `white` : `gray`,
+        border: `1px solid gray`,
       }}
       onClick={onClick}
     >
