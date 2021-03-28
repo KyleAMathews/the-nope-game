@@ -62,12 +62,14 @@ function YesNoQuestion({ question, dispatch, index, state }) {
           height: 52,
         }}
       >
-        <label sx={{ pt: 1 }}>{question.question}</label>
+        <div>
+          <label sx={{ pt: 1 }}>{question.question}</label>
+          <Themed.div sx={{ fontStyle: `italic` }}>
+            {showWarnIfNot ? question.warnIfNo : ``}
+          </Themed.div>
+        </div>
         <ButtonGroup dispatch={dispatch} index={index} state={state} />
       </div>
-      <Themed.div sx={{ fontStyle: `italic` }}>
-        {showWarnIfNot ? question.warnIfNo : ``}
-      </Themed.div>
     </div>
   )
 }
@@ -76,11 +78,11 @@ const questions = [
   {
     question:
       "Is the request clear? (Is the other person clear about what they've asked for?)",
-    warnIfNo: `If you don't fully understand the person's request, you should ask questions to clarify what they want before answering`,
+    warnIfNo: `If the request isn't clear, consider asking for clarification before responding to the request.`,
   },
   {
     question: "Can I do the thing being requested of me?",
-    warnIfNo: `If you can't actually do the thing requested, your answer to the person is almost certainly "no"`,
+    warnIfNo: `If you can't actually do the thing requested, your answer to the person is almost certainly "no".`,
   },
   {
     question:
@@ -171,7 +173,7 @@ export default function Game() {
                   m: 0,
                   p: 2,
                   lineHeight: 1.4,
-                  background: i === noCount ? `lightblue` : `none`,
+                  background: i === Math.min(noCount, 7) ? `lightblue` : `none`,
                 }}
               >
                 {d}
