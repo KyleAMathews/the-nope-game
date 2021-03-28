@@ -30,7 +30,7 @@ const Header = ({ siteTitle, scenario }) => {
             <Link
               to="/"
               sx={{
-                color: `muted`,
+                color: `white`,
                 textDecoration: `none`,
               }}
             >

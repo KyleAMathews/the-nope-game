@@ -7,6 +7,7 @@
   "dependencies": {
     "@adobe/react-spectrum": "^3.9.0",
     "@babel/plugin-proposal-optional-chaining": "^7.13.12",
+    "@fontsource/karla": "^4.2.2",
     "@mdx-js/react": "^1.6.22",
     "@theme-ui/components": "^0.6.0",
     "@theme-ui/presets": "^0.6.0",

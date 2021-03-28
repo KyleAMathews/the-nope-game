@@ -135,14 +135,21 @@ export default function Game() {
     <Layout>
       <div>
         <div sx={{ mb: 4 }}>
-          <Themed.h2>1. What is the request?</Themed.h2>
-          <Input />
+          <Themed.h3>1. What is the request?</Themed.h3>
+          <Input
+            sx={{
+              fontSize: `32px`,
+              borderRadius: 0,
+              outline: 0,
+              borderWidth: `0 0 2px`,
+              borderColor: `blue`,
+              p: 0,
+            }}
+          />
         </div>
         <div sx={{ display: `flex`, justifyContent: `space-between` }}>
           <div sx={{ mr: 5 }}>
-            <Themed.h2 sx={{ mb: 3 }}>
-              2. Mark "yes" or "no" for each question.
-            </Themed.h2>
+            <Themed.h3>2. Mark "yes" or "no" for each question.</Themed.h3>
             {questions.map((question, i) => (
               <YesNoQuestion
                 key={`question-${i}`}
@@ -154,7 +161,7 @@ export default function Game() {
             ))}
           </div>
           <div>
-            <Themed.h2>3. Read the answer here.</Themed.h2>
+            <Themed.h3>3. Read the answer here.</Themed.h3>
             {directives.map((d, i) => (
               <Themed.p
                 key={`directive-${i}`}
