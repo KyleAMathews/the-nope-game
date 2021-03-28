@@ -74,7 +74,8 @@ function YesNoQuestion({ question, dispatch, index, state }) {
 
 const questions = [
   {
-    question: "Is the request clear?",
+    question:
+      "Is the request clear? (Is the other person clear about what they've asked for?)",
     warnIfNo: `If you don't fully understand the person's request, you should ask questions to clarify what they want before answering`,
   },
   {
