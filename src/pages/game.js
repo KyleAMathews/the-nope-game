@@ -165,7 +165,7 @@ export default function Game() {
             ))}
           </div>
           <div>
-            <Themed.h3>3. Read the answer here.</Themed.h3>
+            <Themed.h3>3. How to respond.</Themed.h3>
             {directives.map((d, i) => (
               <Themed.p
                 key={`directive-${i}`}
