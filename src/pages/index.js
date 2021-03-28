@@ -28,6 +28,13 @@ const IndexPage = () => {
           Start new game
         </Button>
       </Styled.p>
+      <Styled.p>
+        Game inspired by <Styled.em>The Dime Game</Styled.em> from{" "}
+        <Styled.a href="https://en.wikipedia.org/wiki/Dialectical_behavior_therapy">
+          Dialectical behavior therapy (DBT)
+        </Styled.a>
+        .
+      </Styled.p>
     </Layout>
   )
 }
