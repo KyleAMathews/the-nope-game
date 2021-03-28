@@ -111,12 +111,13 @@ const directives = [
   `Don't complain; do it cheerfully.`,
   `Do it, even if you’re not cheerful about it.`,
   `Do it, but show that you’d rather not.`,
-  `Say you’d rather not, but do it gracefully.`,
-  `Say no firmly, but reconsider.`,
-  `Say no confidently; resist saying yes.`,
-  `Say no firmly; resist saying yes.`,
+  // `Say you’d rather not, but do it gracefully.`,
+  // `Say no firmly, but reconsider.`,
+  // `Say no confidently; resist saying yes.`,
+  `Say no; be open to negotiate.`,
   `Say no firmly; resist; negotiate.`,
-  `Don't do it.`,
+  `Say no firmly; resist saying yes.`,
+  `Refuse to do it.`,
 ]
 
 const initialState = []
