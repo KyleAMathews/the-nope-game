@@ -4,67 +4,96 @@ import { Themed, jsx } from "theme-ui"
 
 import { Input } from "@theme-ui/components"
 import Layout from "../components/layout"
+import { MdDone } from "react-icons/md"
 
 function ButtonGroup({ dispatch, index, state }) {
   return (
-    <div sx={{ width: 128, flexShrink: 0, ml: 4 }}>
+    <div sx={{ flexShrink: 0, ml: 2 }}>
       <Button
         isSelected={state === `yes`}
         onClick={() => dispatch({ index, state: `yes` })}
       >
-        yes
+        Yes
       </Button>
       <Button
         isSelected={state === `no`}
         onClick={() => dispatch({ index, state: `no` })}
       >
-        no
+        No
       </Button>
     </div>
   )
 }
 
 function Button({ children, isSelected, onClick }) {
+  const yesColors = {
+    color: (opacity = 1) => `rgba(57,40,128,${opacity})`,
+    background: `#F1EDFF`,
+  }
+  const noColors = {
+    color: (opacity = 1) => `rgba(92,24,115,${opacity})`,
+    background: `#F9EBFF`,
+  }
+
+  const colors = children === `Yes` ? yesColors : noColors
+
   return (
     <button
       sx={{
         marginLeft: 2,
-        px: 3,
-        py: 1,
-        borderRadius: 5,
-        background: isSelected ? `gray` : `none`,
+        paddingLeft: `8px`,
+        paddingRight: `8px`,
+        py: `4px`,
+        borderRadius: 2,
+        background: colors.background,
         outline: `none`,
         font: `inherit`,
-        color: isSelected ? `white` : `gray`,
-        border: `1px solid gray`,
+        fontSize: `90%`,
+        width: `72px`,
+        color: colors.color(),
+        border: `2px solid ${colors.color(isSelected ? 1 : 0.5)}`,
       }}
       onClick={onClick}
     >
-      {children}
+      <span>{children}</span>{" "}
+      <span sx={{ fontFamily: `monospace`, paddingLeft: `10px` }}>
+        {isSelected ? (
+          <MdDone size={16} sx={{ position: `relative`, top: `4px` }} />
+        ) : (
+          <span
+            sx={{ display: `inline-block`, height: `16px`, width: `16px` }}
+          />
+        )}
+      </span>
     </button>
   )
 }
 
 function YesNoQuestion({ question, dispatch, index, state }) {
   const showWarnIfNot = question.warnIfNo && state === `no`
-  console.log({ showWarnIfNot })
   return (
     <div
       sx={{
         background: showWarnIfNot ? `lightpink` : `none`,
-        p: 2,
+        p: 1,
+        mb: showWarnIfNot ? 3 : 0,
+        mt: showWarnIfNot ? 3 : 0,
       }}
     >
       <div
         sx={{
           display: `flex`,
           justifyContent: `space-between`,
-          height: 52,
         }}
       >
         <div>
-          <label sx={{ pt: 1 }}>{question.question}</label>
-          <Themed.div sx={{ fontStyle: `italic` }}>
+          <label>{question.question}</label>
+          <Themed.div
+            sx={{
+              fontStyle: `italic`,
+              lineHeight: 1.4,
+            }}
+          >
             {showWarnIfNot ? question.warnIfNo : ``}
           </Themed.div>
         </div>
@@ -76,36 +105,30 @@ function YesNoQuestion({ question, dispatch, index, state }) {
 
 const questions = [
   {
-    question:
-      "Is the request clear? (Is the other person clear about what they've asked for?)",
+    question: "Is the request clear to me?",
     warnIfNo: `If the request isn't clear, consider asking for clarification before responding to the request.`,
   },
   {
-    question: "Can I do the thing being requested of me?",
+    question: "Can I give the person what they want?",
     warnIfNo: `If you can't actually do the thing requested, your answer to the person is almost certainly "no".`,
   },
   {
-    question:
-      "Am i required by law or moral code to give or do what is wanted?",
+    question: "Is maintaining the relationship more important than saying no?",
+  },
+  { question: "Will saying no be against my values and make me feel guilty?" },
+  {
+    question: "Am i required by law or moral code to do it?",
   },
   {
-    question:
-      "Does the other person possess any kind of formal authority that permits them to tell me what to do or ask me to do things?",
+    question: "Is the other person responsible for telling me what to do?",
   },
   {
-    question:
-      "Is what the person is requesting of me appropriate to my relationship with this person?",
+    question: "Is the request appropriate to my relationship with this person?",
   },
   {
-    question:
-      "Do I want to fulfill this request to avoid harming this relationship?",
+    question: "Do I owe this person a favor because they do a lot for me?",
   },
-  { question: "Will saying no make me feel bad about myself?" },
-  {
-    question:
-      "Do I owe this person a favor? (Does the person do a lot for me?)",
-  },
-  { question: "In the long term, will I regret saying no?" },
+  { question: "Is now a good time to say no?" },
 ]
 
 const directives = [
@@ -134,12 +157,11 @@ export default function Game() {
   const [state, dispatch] = React.useReducer(reducer, initialState)
   const yesCount = state.filter((i) => i === `yes`).length
   const noCount = state.filter((i) => i === `no`).length
-  console.log({ yesCount, noCount })
   return (
     <Layout>
       <div>
         <div sx={{ mb: 4 }}>
-          <Themed.h3>1. What is the request?</Themed.h3>
+          <Themed.h5>1. What is the request?</Themed.h5>
           <Input
             sx={{
               fontSize: `32px`,
@@ -152,8 +174,8 @@ export default function Game() {
           />
         </div>
         <div sx={{ display: `flex`, justifyContent: `space-between` }}>
-          <div sx={{ mr: 5 }}>
-            <Themed.h3>2. Mark "yes" or "no" for each question.</Themed.h3>
+          <div sx={{ mr: 5, flex: 1 }}>
+            <Themed.h5>2. Mark "yes" or "no" for each question.</Themed.h5>
             {questions.map((question, i) => (
               <YesNoQuestion
                 key={`question-${i}`}
@@ -165,7 +187,9 @@ export default function Game() {
             ))}
           </div>
           <div>
-            <Themed.h3>3. How to respond.</Themed.h3>
+            <Themed.h5>
+              3. Read the advice here and consider following it.
+            </Themed.h5>
             {directives.map((d, i) => (
               <Themed.p
                 key={`directive-${i}`}

@@ -1,5 +1,6 @@
 import "@fontsource/karla/latin.css"
 import "@fontsource/karla/latin-300-italic.css"
+import "@fontsource/karla/latin-700.css"
 import { tailwind } from "@theme-ui/presets"
 let baseStyles = {
   ...tailwind,
@@ -16,7 +17,7 @@ baseStyles = {
   },
 }
 
-baseStyles.styles.h3.fontWeight = 300
-baseStyles.styles.h3.fontStyle = `italic`
+baseStyles.styles.h5.fontWeight = 700
+// baseStyles.styles.h3.fontStyle = `italic`
 
 export default baseStyles
