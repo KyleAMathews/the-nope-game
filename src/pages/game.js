@@ -86,7 +86,7 @@ function YesNoQuestion({ question, dispatch, index, state }) {
           justifyContent: `space-between`,
         }}
       >
-        <div>
+        <div sx={{ mr: 3 }}>
           <label>{question.question}</label>
           <Themed.div
             sx={{
@@ -159,7 +159,7 @@ export default function Game() {
   const noCount = state.filter((i) => i === `no`).length
   return (
     <Layout>
-      <div>
+      <div sx={{ maxWidth: `1280px` }}>
         <div sx={{ mb: 4 }}>
           <Themed.h5>1. What is the request?</Themed.h5>
           <Input
@@ -174,7 +174,7 @@ export default function Game() {
           />
         </div>
         <div sx={{ display: `flex`, justifyContent: `space-between` }}>
-          <div sx={{ mr: 5, flex: 1 }}>
+          <div sx={{ mr: 5 }}>
             <Themed.h5>2. Mark "yes" or "no" for each question.</Themed.h5>
             {questions.map((question, i) => (
               <YesNoQuestion
