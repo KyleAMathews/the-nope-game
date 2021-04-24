@@ -1,6 +1,7 @@
 module.exports = {
   flags: {
     DEV_SSR: true,
+    PRESERVE_WEBPACK_CACHE: true,
   },
   siteMetadata: {
     title: `The Nope Game`,
