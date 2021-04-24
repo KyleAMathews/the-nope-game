@@ -190,19 +190,27 @@ export default function Game() {
             <Themed.h5>
               3. Read the advice here and consider following it.
             </Themed.h5>
-            {directives.map((d, i) => (
-              <Themed.p
-                key={`directive-${i}`}
-                sx={{
-                  m: 0,
-                  p: 2,
-                  lineHeight: 1.4,
-                  background: i === Math.min(noCount, 7) ? `lightblue` : `none`,
-                }}
-              >
-                {d}
-              </Themed.p>
-            ))}
+            {directives.map((d, i) => {
+              const isSelected = i === Math.min(noCount, 7)
+              return (
+                <Themed.p
+                  key={`directive-${i}`}
+                  sx={{
+                    m: 0,
+                    p: 2,
+                    lineHeight: 1.4,
+                    borderRadius: `2px`,
+                    paddingLeft: isSelected ? 3 : 2,
+                    borderLeft: isSelected ? `3px solid black` : `inherit`,
+                    fontSize: isSelected ? `21px` : `inherit`,
+                    fontWeight: isSelected ? `bold` : `inherit`,
+                    background: isSelected ? `#F1EDFF` : `none`,
+                  }}
+                >
+                  {d}
+                </Themed.p>
+              )
+            })}
           </div>
         </div>
       </div>
