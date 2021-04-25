@@ -169,17 +169,17 @@ export default function Game() {
   return (
     <Layout>
       <div sx={{ maxWidth: `1280px` }}>
-        <div sx={{ mb: 4 }}>
-          <Themed.h5 sx={{ mb: 3 }}>1. What is the request?</Themed.h5>
+        <div sx={{ mb: 5 }}>
+          <Themed.h5 sx={{ mb: 4 }}>1. What is the request?</Themed.h5>
           <Input
             sx={{
               background: `#F5F5F5`,
               px: 3,
-              pt: 3,
+              pt: 2,
               pb: 1,
-              fontSize: `18px`,
+              fontSize: `21px`,
               maxWidth: `600px`,
-              borderRadius: 0,
+              borderRadius: `2px`,
               outline: 0,
               borderWidth: `0 0 1px`,
               borderColor: `blue`,
