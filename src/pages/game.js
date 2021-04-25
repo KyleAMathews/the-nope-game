@@ -29,10 +29,12 @@ function Button({ children, isSelected, onClick }) {
   const yesColors = {
     color: (opacity = 1) => `rgba(57,40,128,${opacity})`,
     background: `#F1EDFF`,
+    backgroundHover: `#D5CBFF`,
   }
   const noColors = {
     color: (opacity = 1) => `rgba(92,24,115,${opacity})`,
     background: `#F9EBFF`,
+    backgroundHover: `#e2cbff`,
   }
 
   const colors = children === `Yes` ? yesColors : noColors
@@ -46,12 +48,17 @@ function Button({ children, isSelected, onClick }) {
         py: `4px`,
         borderRadius: 2,
         background: colors.background,
+        cursor: `pointer`,
         outline: `none`,
         font: `inherit`,
         fontSize: `90%`,
         width: `72px`,
         color: colors.color(),
         border: `2px solid ${colors.color(isSelected ? 1 : 0.5)}`,
+        "&:hover": {
+          background: colors.backgroundHover,
+          border: `2px solid ${colors.color()}`,
+        },
       }}
       onClick={onClick}
     >
@@ -153,6 +160,8 @@ function reducer(state, action) {
   return [...state]
 }
 
+const lightgray = `#e2e1e1`
+
 export default function Game() {
   const [state, dispatch] = React.useReducer(reducer, initialState)
   const yesCount = state.filter((i) => i === `yes`).length
@@ -161,33 +170,52 @@ export default function Game() {
     <Layout>
       <div sx={{ maxWidth: `1280px` }}>
         <div sx={{ mb: 4 }}>
-          <Themed.h5>1. What is the request?</Themed.h5>
+          <Themed.h5 sx={{ mb: 3 }}>1. What is the request?</Themed.h5>
           <Input
             sx={{
-              fontSize: `32px`,
+              background: `#F5F5F5`,
+              px: 3,
+              pt: 3,
+              pb: 1,
+              fontSize: `18px`,
+              maxWidth: `600px`,
               borderRadius: 0,
               outline: 0,
-              borderWidth: `0 0 2px`,
+              borderWidth: `0 0 1px`,
               borderColor: `blue`,
-              p: 0,
+              "&:hover": {
+                background: lightgray,
+              },
             }}
           />
+          <label sx={{ fontSize: `12px`, ml: 3 }}>
+            A description of the request.
+          </label>
         </div>
         <div sx={{ display: `flex`, justifyContent: `space-between` }}>
           <div sx={{ mr: 5 }}>
-            <Themed.h5>2. Mark "yes" or "no" for each question.</Themed.h5>
-            {questions.map((question, i) => (
-              <YesNoQuestion
-                key={`question-${i}`}
-                state={state[i]}
-                index={i}
-                dispatch={dispatch}
-                question={question}
-              />
-            ))}
+            <Themed.h5 sx={{ mb: 4 }}>
+              2. Mark "yes" or "no" for each question.
+            </Themed.h5>
+            <div
+              sx={{
+                border: `1px solid ${lightgray}`,
+                p: 2,
+              }}
+            >
+              {questions.map((question, i) => (
+                <YesNoQuestion
+                  key={`question-${i}`}
+                  state={state[i]}
+                  index={i}
+                  dispatch={dispatch}
+                  question={question}
+                />
+              ))}
+            </div>
           </div>
           <div>
-            <Themed.h5>
+            <Themed.h5 sx={{ mb: 4 }}>
               3. Read the advice here and consider following it.
             </Themed.h5>
             {directives.map((d, i) => {
@@ -201,7 +229,9 @@ export default function Game() {
                     lineHeight: 1.4,
                     borderRadius: `2px`,
                     paddingLeft: isSelected ? 3 : 2,
-                    borderLeft: isSelected ? `3px solid black` : `inherit`,
+                    borderLeft: isSelected
+                      ? `3px solid rgba(57,40,128,1)`
+                      : `inherit`,
                     fontSize: isSelected ? `21px` : `inherit`,
                     fontWeight: isSelected ? `bold` : `inherit`,
                     background: isSelected ? `#F1EDFF` : `none`,

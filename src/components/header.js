@@ -11,13 +11,7 @@ const Header = ({ siteTitle, scenario }) => {
   const service = useContext(ServiceContext)
   if (typeof service === `undefined` || service.current.value === `inactive`) {
     return (
-      <Themed.div
-        g
-        as="header"
-        sx={{
-          background: `background`,
-        }}
-      >
+      <Themed.div g as="header">
         <div
           sx={{
             // margin: `0 auto`,
@@ -26,17 +20,17 @@ const Header = ({ siteTitle, scenario }) => {
             px: 4,
           }}
         >
-          <Themed.h1 sx={{ margin: 0 }}>
+          <Themed.h3 sx={{ margin: 0 }}>
             <Link
               to="/"
               sx={{
-                color: `white`,
+                // color: `white`,
                 textDecoration: `none`,
               }}
             >
               {siteTitle}
             </Link>
-          </Themed.h1>
+          </Themed.h3>
         </div>
       </Themed.div>
     )
