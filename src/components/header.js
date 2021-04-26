@@ -4,6 +4,7 @@ import { Themed, jsx } from "theme-ui"
 import { Box } from "@theme-ui/components"
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
+import { StaticImage } from "gatsby-plugin-image"
 
 import ServiceContext from "../service-context"
 
@@ -28,7 +29,11 @@ const Header = ({ siteTitle, scenario }) => {
                 textDecoration: `none`,
               }}
             >
-              {siteTitle}
+              <StaticImage
+                width={145}
+                src="../images/nope-game-logo.png"
+                alt={siteTitle}
+              />
             </Link>
           </Themed.h3>
         </div>

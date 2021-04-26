@@ -34,7 +34,7 @@ function Button({ children, isSelected, onClick }) {
   const noColors = {
     color: (opacity = 1) => `rgba(92,24,115,${opacity})`,
     background: `#F9EBFF`,
-    backgroundHover: `#e2cbff`,
+    backgroundHover: `#F0C3FF`,
   }
 
   const colors = children === `Yes` ? yesColors : noColors
